@@ -201,6 +201,7 @@ class ChatSession:
             "THUDM/codegeex4-all-9b",
             "Qwen/Qwen2.5-Coder-1.5B-Instruct",
             "Qwen/Qwen2.5-Coder-7B-Instruct",
+            'Qwen/Qwen2.5-7B-Instruct',
         ]
         
     def _apply_chat_template(self, usr_msg, sys_msg=None):

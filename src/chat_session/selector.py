@@ -87,7 +87,11 @@ def get_instruct_models() -> list:
         'deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct',
         'deepseek-ai/DeepSeek-Coder-V2-Instruct',
         'deepseek-ai/deepseek-coder-6.7b-instruct',
-        'stabilityai/stable-code-instruct-3b'
+        'stabilityai/stable-code-instruct-3b',
+        'OLMo-7B-Instruct',
+        'mistralai/Mistral-7B-Instruct-v0.3',
+        'Qwen/Qwen2.5-7B-Instruct',
+        'bavest/fin-llama-33b-merged',
     ])
 
 def get_pipeline_models() -> list:
@@ -224,7 +228,11 @@ def get_hf_generate_models() -> list:
         'replit/replit-code-v1_5-3b',
         'replit/replit-code-v1-3b',
         'stabilityai/stable-code-3b',
-        'stabilityai/stable-code-instruct-3b'
+        'stabilityai/stable-code-instruct-3b',
+        'OLMo-7B-Instruct',
+        'mistralai/Mistral-7B-Instruct-v0.3',
+        'Qwen/Qwen2.5-7B-Instruct',
+        'bavest/fin-llama-33b-merged'
     ])
     return models
 

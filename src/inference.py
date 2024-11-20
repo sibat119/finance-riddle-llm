@@ -16,7 +16,13 @@ def main():
     ds = Dataset.from_csv(input_ds_path)
     cfg = cfg_reader.primary.load("/home/sibat/repoes/LLM-Inference/conf/config.yaml")
 
-    llms = ['meta-llama/Meta-Llama-3-8B-Instruct']
+    llms = [
+        'meta-llama/Meta-Llama-3-8B-Instruct',
+        'OLMo-7B-Instruct',
+        'mistralai/Mistral-7B-Instruct-v0.3',
+        'Qwen/Qwen2.5-7B-Instruct',
+        'meta-llama/Llama-3.2-3B-Instruct'
+        ]
     instruct_models = selector.get_instruct_models()
 
     results = []
@@ -28,7 +34,6 @@ def main():
 
         # Generate responses for each input
         def generate_response(example):
-            breakpoint()
             input_text = example["question"]
 
             # Generate response for the input
@@ -43,7 +48,7 @@ def main():
                 response = session.get_response([input_text], clean_output=True)
 
             # Add response as a new field for this LLM
-            example[f"{llm}-response"] = response
+            example[f"{llm}"] = response
             return example
 
         # Use `map` to apply response generation
@@ -54,6 +59,6 @@ def main():
 
     # Save to CSV
     output_file = "llm_responses.csv"
-    df.to_csv(output_file, index=False)
+    df.to_csv(f"{out_dir}/{output_file}", index=False)
 
     print(f"Results saved to {output_file}")
