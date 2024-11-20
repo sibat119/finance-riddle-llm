@@ -14,7 +14,7 @@ from src.utils import (
 input_ds_path = f'{files.get_project_root()}/data/input/questions.csv'
 out_dir = f'{files.get_project_root()}/data/output'
 ds = Dataset.from_csv(input_ds_path)
-cfg = cfg_reader.primary.load()
+cfg = cfg_reader.primary.load("/home/sibat/repoes/LLM-Inference/conf/config.yaml")
 
 llms = ['meta-llama/Meta-Llama-3-8B-Instruct']
 instruct_models = selector.get_instruct_models()
@@ -23,12 +23,13 @@ results = []
 
 # Loop through LLMs and generate responses
 for llm in tqdm(llms, desc='Evaluating LLMs'):
-    display.in_progress(f'Testing {llm}')
+    display.in_progress(f'Generating response from {llm}')
     session = selector.select_chat_model(cfg, llm)
 
     # Generate responses for each input
     def generate_response(example):
-        input_text = example["input"]
+        breakpoint()
+        input_text = example["question"]
 
         # Generate response for the input
         if llm in instruct_models:
@@ -46,10 +47,10 @@ for llm in tqdm(llms, desc='Evaluating LLMs'):
         return example
 
     # Use `map` to apply response generation
-    input_dataset = input_dataset.map(generate_response)
+    output_dataset = ds.map(generate_response)
 
 # Convert to a pandas DataFrame for easier CSV export
-df = input_dataset.to_pandas()
+df = output_dataset.to_pandas()
 
 # Save to CSV
 output_file = "llm_responses.csv"
