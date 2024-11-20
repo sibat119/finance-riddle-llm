@@ -1,0 +1,26 @@
+log_file: log/debug.log
+# model: gpt-4 # currently only support text-davinci-003, we will support more open-source LLMs in the future
+use_completion: true
+output_dir: "{{PROJECT_ROOT}}/data/generated_yaml"
+data_path: "{{PROJECT_ROOT}}/data/inputs/stratified_samples.csv"
+small_data_path: "{{PROJECT_ROOT}}/data/inputs/small_data_95.csv"
+inventory_file: "{{PROJECT_ROOT}}/data/ansible/hosts.ini"
+docker_dir: "{{PROJECT_ROOT}}/docker"
+private_key: "{{PROJECT_ROOT}}/docker/ssh/cf-key"
+root_path: "{{PROJECT_ROOT}}"
+
+temperatures: 
+  - 0.2
+taxonomy_filepath: "{{PROJECT_ROOT}}/conf/prompts"
+syntax_nudge: produced Ansible playboook is syntactically incorrect. Please revise your response with an syntactically accurate playbook.
+model_cache: "{{PROJECT_ROOT}}/data/cache"
+
+max_length: 4096
+num_output_tokens: 1024
+num_retries: 3 # for openai api
+use_default_sampling_params: true # this overrides top_p and temperature
+temperature: 0.1
+top_p: .95
+batch_size:
+  default: 10
+  
