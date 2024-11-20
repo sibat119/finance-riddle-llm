@@ -34,11 +34,11 @@ def main():
     cfg = cfg_reader.primary.load("conf/config.yaml")
 
     llms = [
+        'Qwen/Qwen2.5-7B-Instruct',
+        'meta-llama/Llama-3.2-3B-Instruct'
+        'meta-llama/Meta-Llama-3-8B-Instruct',
         'allenai/OLMo-7B-Instruct',
         'mistralai/Mistral-7B-Instruct-v0.3',
-        'Qwen/Qwen2.5-7B-Instruct',
-        'meta-llama/Meta-Llama-3-8B-Instruct',
-        'meta-llama/Llama-3.2-3B-Instruct'
         ]
     instruct_models = selector.get_instruct_models()
 

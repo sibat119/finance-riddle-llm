@@ -206,7 +206,7 @@ class ChatSession:
         
     def _apply_chat_template(self, usr_msg, sys_msg=None):
         msg = [
-                {"role": "system", "content": sys_msg},
+                {"role": "system", "content": sys_msg if sys_msg else ""},
                 {"role": "user", "content": usr_msg},
             ]
         # breakpoint()
