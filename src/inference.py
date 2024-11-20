@@ -1,5 +1,9 @@
 from datasets import Dataset
 from tqdm import tqdm
+import torch
+import gc
+from typing import Dict, List, Tuple, Any, Optional
+from torch.distributed import destroy_process_group
 
 from src.chat_session import (
     selector
@@ -10,6 +14,19 @@ from src.utils import (
     strings,
     display
 )
+
+def cleanup_resources(session: Any, verbose: bool = True):
+    """Clean up resources and memory."""
+    try:
+        del session
+        gc.collect()
+        torch.cuda.empty_cache()
+        if torch.distributed.is_initialized():
+            destroy_process_group()
+    except Exception as e:
+        if verbose:
+            print(str(e))
+            
 def main():
     input_ds_path = f'{files.get_project_root()}/data/input/questions.csv'
     out_dir = f'{files.get_project_root()}/data/output'
@@ -33,8 +50,11 @@ def main():
         session = selector.select_chat_model(cfg, llm)
 
         # Generate responses for each input
-        def generate_response(example):
+        for example in tqdm(ds):
             input_text = example["question"]
+            input_id = example["id"]
+            response = ""
+            
 
             # Generate response for the input
             if llm in instruct_models:
@@ -48,13 +68,18 @@ def main():
                 response = session.get_response([input_text], clean_output=True)
 
             # Add response as a new field for this LLM
-            example[f"{llm}"] = response
-            return example
+            existing_entry = next((item for item in results if item["id"] == input_id), None)
+            if existing_entry:
+                existing_entry[f"{llm}"] = response
+            else:
+                new_entry = {"id": input_id, "input": input_text, f"{llm}": response}
+                results.append(new_entry)
 
-        # Use `map` to apply response generation
-        output_dataset = ds.map(generate_response)
+        # clear resources
+        cleanup_resources(session=session)
 
     # Convert to a pandas DataFrame for easier CSV export
+    output_dataset = Dataset.from_list(results)
     df = output_dataset.to_pandas()
 
     # Save to CSV
