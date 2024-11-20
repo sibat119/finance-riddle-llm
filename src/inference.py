@@ -31,7 +31,7 @@ def main():
     input_ds_path = f'{files.get_project_root()}/data/input/questions.csv'
     out_dir = f'{files.get_project_root()}/data/output'
     ds = Dataset.from_csv(input_ds_path)
-    cfg = cfg_reader.primary.load("/home/sibat/repoes/LLM-Inference/conf/config.yaml")
+    cfg = cfg_reader.primary.load("conf/config.yaml")
 
     llms = [
         'meta-llama/Meta-Llama-3-8B-Instruct',
