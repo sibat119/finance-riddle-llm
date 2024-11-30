@@ -1,0 +1,2 @@
+id,question
+1, Create an Ansible playbook to solve the task of ''Have ansible vars be a range of numbers''. Context for the task is available here: ''I currently have a ansible script as such---- hosts: all  gather_facts: False  vars:    http_port: 3014  tasks:  - name: Supervisor stop {{ http_port }}    become: true    supervisorctl:      name: yt{{ http_port }}      state: stoppedBut I need to do this for say ports 3000 through 3100. How would I have it dynamically change the http_port variable to loop through that many numbers?''.

@@ -28,17 +28,17 @@ def cleanup_resources(session: Any, verbose: bool = True):
             print(str(e))
             
 def main():
-    input_ds_path = f'{files.get_project_root()}/data/input/questions.csv'
+    input_ds_path = f'{files.get_project_root()}/data/input/input_test.csv'
     out_dir = f'{files.get_project_root()}/data/output'
     ds = Dataset.from_csv(input_ds_path)
     cfg = cfg_reader.primary.load("conf/config.yaml")
 
     llms = [
-        'Qwen/Qwen2.5-7B-Instruct',
-        'meta-llama/Llama-3.2-3B-Instruct',
-        'meta-llama/Meta-Llama-3-8B-Instruct',
-        'allenai/OLMo-7B-Instruct',
-        'mistralai/Mistral-7B-Instruct-v0.3',
+        # 'Qwen/Qwen2.5-7B-Instruct',
+        'meta-llama/Llama-3.2-1B-Instruct',
+        # 'meta-llama/Meta-Llama-3-8B-Instruct',
+        # 'allenai/OLMo-7B-Instruct',
+        # 'mistralai/Mistral-7B-Instruct-v0.3',
         ]
     instruct_models = selector.get_instruct_models()
 
