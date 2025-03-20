@@ -37,7 +37,7 @@ class HFGenerateSession(ChatSession):
             torch_dtype='auto',
             device_map='auto',
             trust_remote_code=self.trust_remote_code,
-            cache_dir=config['model_cache'],
+            # cache_dir=config['model_cache'],
         )
 
         self.generation_config = GenerationConfig(
