@@ -158,6 +158,7 @@ def get_vllm_models() -> list:
         'Qwen/QwQ-32B',
         'Qwen/Qwen2.5-14B-Instruct',
         'meta-llama/Llama-3.1-8B-Instruct'
+        'Qwen/Qwen2.5-7B-Instruct'
     ])
 
 def get_generation_models() -> list:
