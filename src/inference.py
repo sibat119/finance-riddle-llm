@@ -45,10 +45,10 @@ def main():
     
     llms = [
         # 'Qwen/Qwen2.5-7B-Instruct',
-        'meta-llama/Llama-3.2-1B-Instruct',
-        # 'meta-llama/Llama-3.1-8B-Instruct',
-        # "Qwen/QwQ-32B",
-        # 'Qwen/Qwen2.5-14B-Instruct',
+        # 'meta-llama/Llama-3.2-1B-Instruct',
+        'meta-llama/Llama-3.1-8B-Instruct',
+        "Qwen/QwQ-32B",
+        'Qwen/Qwen2.5-14B-Instruct',
         # 'allenai/OLMo-7B-Instruct',
         # 'mistralai/Mistral-7B-Instruct-v0.3',
         ]
@@ -103,9 +103,6 @@ def main():
             else:
                 new_entry = {"id": input_id, "input": input_text, "prompt": system_information, f"{llm}": response}
                 results.append(new_entry)
-                
-            if idx > 3:
-                break
 
         # clear resources
         cleanup_resources(session=session)
