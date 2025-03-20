@@ -10,10 +10,10 @@ private_key: "{{PROJECT_ROOT}}/docker/ssh/cf-key"
 root_path: "{{PROJECT_ROOT}}"
 
 temperatures: 
-  - 0.2
+  - 0.5
 taxonomy_filepath: "{{PROJECT_ROOT}}/conf/prompts"
 syntax_nudge: produced Ansible playboook is syntactically incorrect. Please revise your response with an syntactically accurate playbook.
-model_cache: "{{PROJECT_ROOT}}/data/cache"
+# model_cache: "{{PROJECT_ROOT}}/data/cache"
 
 max_length: 4096
 num_output_tokens: 1024

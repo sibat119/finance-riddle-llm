@@ -4,7 +4,7 @@ from .hf_pipeline_models import PipelineSession
 from .hf_generate_models import HFGenerateSession
 from .wizardcoder import WizardCoderSession
 from .salesforce import SalesforceSession
-# from .vllm_models import VllmSession
+from .vllm_models import VllmSession
 from .incoder import IncoderSession
 
 from src.utils import (
@@ -23,8 +23,8 @@ def select_chat_model(cfg: dict, model_name: str, temperature: float = 0.1) -> C
     """
     if model_name in get_gpt_models():
         return  OpenAISession(cfg, model_name, temperature)
-    # elif model_name in get_vllm_models():
-    #     return VllmSession(cfg, model_name, temperature)
+    elif model_name in get_vllm_models():
+        return VllmSession(cfg, model_name, temperature)
     elif model_name in get_pipeline_models():
         return PipelineSession(cfg, model_name, temperature)
     elif model_name in get_incoder_models():
@@ -77,6 +77,7 @@ def get_instruct_models() -> list:
         'meta-llama/Meta-Llama-3-8B-Instruct',
         'Qwen/Qwen2.5-Coder-1.5B-Instruct',
         'Qwen/Qwen2.5-Coder-7B-Instruct',
+        "Qwen/Qwen2.5-14B-Instruct",
         'THUDM/chatglm2-6b',
         'microsoft/Phi-3.5-mini-instruct',
         'microsoft/Phi-3-mini-4k-instruct',
@@ -93,6 +94,8 @@ def get_instruct_models() -> list:
         'mistralai/Mistral-7B-Instruct-v0.3',
         'Qwen/Qwen2.5-7B-Instruct',
         'bavest/fin-llama-33b-merged',
+        'Qwen/QwQ-32B',
+        'meta-llama/Llama-3.1-8B-Instruct',
     ])
 
 def get_pipeline_models() -> list:
@@ -152,6 +155,9 @@ def get_vllm_models() -> list:
         'meta-llama/Llama-3.2-1B-Instruct',
         'meta-llama/Llama-3.2-3B-Instruct',
         'meta-llama/Meta-Llama-3-8B-Instruct',
+        'Qwen/QwQ-32B',
+        'Qwen/Qwen2.5-14B-Instruct',
+        'meta-llama/Llama-3.1-8B-Instruct'
     ])
 
 def get_generation_models() -> list:

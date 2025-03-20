@@ -59,7 +59,6 @@ class HFGenerateSession(ChatSession):
         #input_ids = self.tokenizer(
 
         msg, return_str = self._prepare_batch(user_message, system_message)
-
         tokens = self.tokenizer(
             msg,
             max_length=4096-self.num_output_tokens,
