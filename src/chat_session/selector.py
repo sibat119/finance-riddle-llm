@@ -96,6 +96,8 @@ def get_instruct_models() -> list:
         'bavest/fin-llama-33b-merged',
         'Qwen/QwQ-32B',
         'meta-llama/Llama-3.1-8B-Instruct',
+        'deepseek-ai/DeepSeek-R1-Distill-Llama-8B',
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
     ])
 
 def get_pipeline_models() -> list:
@@ -159,6 +161,9 @@ def get_vllm_models() -> list:
         'Qwen/Qwen2.5-14B-Instruct',
         'meta-llama/Llama-3.1-8B-Instruct'
         'Qwen/Qwen2.5-7B-Instruct'
+        'meta-llama/Llama-3.1-8B-Instruct',
+        'deepseek-ai/DeepSeek-R1-Distill-Llama-8B',
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
     ])
 
 def get_generation_models() -> list:

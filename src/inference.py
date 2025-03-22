@@ -28,8 +28,9 @@ def cleanup_resources(session: Any, verbose: bool = True):
             print(str(e))
             
 def main():
-    input_ds_path = f'{files.get_project_root()}/data/input/question_w_type.csv'
-    out_dir = f'{files.get_project_root()}/data/output/type_based_questions'
+    # input_ds_path = f'{files.get_project_root()}/data/input/question_w_type.csv'
+    input_ds_path = f'{files.get_project_root()}/data/input/riddles-v1.csv'
+    out_dir = f'{files.get_project_root()}/data/output/riddles/'
     ds = Dataset.from_csv(input_ds_path)
     cfg = cfg_reader.primary.load("conf/config.yaml")
     prompts = cfg_reader.primary.load("data/prompt/fin.yml")
@@ -46,9 +47,11 @@ def main():
     llms = [
         # 'Qwen/Qwen2.5-7B-Instruct',
         # 'meta-llama/Llama-3.2-1B-Instruct',
-        'meta-llama/Llama-3.1-8B-Instruct',
+        # 'meta-llama/Llama-3.1-8B-Instruct',
         "Qwen/QwQ-32B",
-        'Qwen/Qwen2.5-14B-Instruct',
+        "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+        # 'Qwen/Qwen2.5-14B-Instruct',
         # 'allenai/OLMo-7B-Instruct',
         # 'mistralai/Mistral-7B-Instruct-v0.3',
         ]
@@ -57,7 +60,8 @@ def main():
     results = []
     # system_information = "You are a seasoned financial analyst with expertise in global markets, equity analysis, and financial modeling. Provide detailed and data-driven responses including technical metrics tailored to financial experts."
                 
-    system_information = "You are a financial analyst who explains topics such as global markets, stocks, and financial models in a simple and easy-to-understand manner. Provide clear, concise answers with relatable examples, avoiding technical jargon, to help a layperson easily grasp the concepts."
+    # system_information = "You are a financial analyst who explains topics such as global markets, stocks, and financial models in a simple and easy-to-understand manner. Provide clear, concise answers with relatable examples, avoiding technical jargon, to help a layperson easily grasp the concepts."
+    system_information = "Solve these bengali riddles also provide your reasoning for it."
 
     # Loop through LLMs and generate responses
     for llm in tqdm(llms, desc='Evaluating LLMs'):
@@ -66,13 +70,13 @@ def main():
 
         # Generate responses for each input
         for idx, example in tqdm(enumerate(ds)):
-            question = example["question"]
-            input_id = example["id"]
-            type_of_question = example['type']
-            # breakpoint()
-            input_text = prompts.get(prompt_category_map.get(type_of_question, ""), "")
-            if input_text:
-                input_text = input_text.format(question)
+            input_text = example["Questions"]
+            input_id = idx
+            # type_of_question = example['type']
+            breakpoint()
+            # input_text = prompts.get(prompt_category_map.get(type_of_question, ""), "")
+            # if input_text:
+            #     input_text = input_text.format(question)
             
             response = ""
             
