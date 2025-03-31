@@ -69,45 +69,47 @@ def main():
         display.in_progress(f'Generating response from {llm}')
         session = selector.select_chat_model(cfg, llm)
 
-        # Generate responses for each input
-        for idx, example in tqdm(enumerate(ds)):
-            input_text = example["Questions"]
-            input_id = idx
-            # type_of_question = example['type']
-            # breakpoint()
-            # input_text = prompts.get(prompt_category_map.get(type_of_question, ""), "")
-            # if input_text:
-            #     input_text = input_text.format(question)
+        # Process in batches of 16
+        batch_size = 16
+        for batch_start in tqdm(range(0, len(ds), batch_size), desc=f'Processing batches for {llm}'):
+            batch_end = min(batch_start + batch_size, len(ds))
+            batch_examples = ds[batch_start:batch_end]
             
-            response = ""
+            batch_inputs = batch_examples["Questions"]
+            batch_ids = list(range(batch_start, batch_start + len(batch_examples)))
             
-
-            # Generate response for the input
+            batch_responses = []
+            
+            # Generate responses for the batch
             if llm in instruct_models:
                 if llm in selector.get_gpt_models():
-                    response = session.get_response(input_text[-4000:], sysrole=None)
-                    if response is None:
-                        response = ''
+                    batch_responses = []
+                    for input_text in batch_inputs:
+                        response = session.get_response(input_text[-4000:], sysrole=None)
+                        batch_responses.append(response if response is not None else '')
                 else:
-                    response = session.get_response(
-                        user_message=input_text,
+                    # Use batch inference
+                    batch_responses = session.get_response(
+                        user_message=batch_inputs,
                         system_message=system_information,
                         clean_output=True)
             else:
-                response = session.get_response(
-                    user_message=[input_text], 
-                    system_message=[system_information], 
+                # Use batch inference with lists
+                batch_responses = session.get_response(
+                    user_message=batch_inputs, 
+                    system_message=[system_information] * len(batch_inputs), 
                     clean_output=True
                     )
-
-            # Add response as a new field for this LLM
-            existing_entry = next((item for item in results if item["id"] == input_id), None)
-            if existing_entry:
-                existing_entry[f"{llm}"] = response
-                existing_entry["prompt"] = system_information
-            else:
-                new_entry = {"id": input_id, "input": input_text, "prompt": system_information, f"{llm}": response}
-                results.append(new_entry)
+            
+            # Add responses to results
+            for i, (input_id, input_text, response) in enumerate(zip(batch_ids, batch_inputs, batch_responses)):
+                existing_entry = next((item for item in results if item["id"] == input_id), None)
+                if existing_entry:
+                    existing_entry[f"{llm}"] = response
+                    existing_entry["prompt"] = system_information
+                else:
+                    new_entry = {"id": input_id, "input": input_text, "prompt": system_information, f"{llm}": response}
+                    results.append(new_entry)
 
         # clear resources
         cleanup_resources(session=session)
