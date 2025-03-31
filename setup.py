@@ -8,7 +8,7 @@ with open(requirements_dir, 'r') as f:
 	requirements = f.read().splitlines()
 
 setup(
-	name='llm-inference',
+	name='finance-riddle-llm',
 	version='0.0.1',
 	py_modules=['llm-inference'],
 	install_requires=requirements,
