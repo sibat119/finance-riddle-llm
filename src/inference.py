@@ -77,7 +77,7 @@ def main():
             
             batch_inputs = batch_examples["Questions"]
             batch_ids = list(range(batch_start, batch_start + len(batch_examples)))
-            
+            system_information_batched = [system_information] * len(batch_inputs)
             batch_responses = []
             
             # Generate responses for the batch
@@ -91,13 +91,13 @@ def main():
                     # Use batch inference
                     batch_responses = session.get_response(
                         user_message=batch_inputs,
-                        system_message=system_information,
+                        system_message=system_information_batched,
                         clean_output=True)
             else:
                 # Use batch inference with lists
                 batch_responses = session.get_response(
                     user_message=batch_inputs, 
-                    system_message=[system_information] * len(batch_inputs), 
+                    system_message=system_information_batched, 
                     clean_output=True
                     )
             
