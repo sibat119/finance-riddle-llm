@@ -1,6 +1,6 @@
 openai>=1.12.0
-tiktoken==0.4.0 # for codegen (https://huggingface.co/Salesforce/codegen25-7b-instruct)
-# vllm==0.2.7
+tiktoken>=0.4.0
+vllm
 accelerate
 ansible
 ansiblemetrics
@@ -12,9 +12,7 @@ pandas
 tokenizers
 torch
 tqdm
-transformers # use this to support models besides codegen
-#transformers==4.33.2 # use this to run codegen
-#transformers==4.10.0 # use this to run santacoder
+transformers
 argcomplete
 simple_term_menu
 paramiko
