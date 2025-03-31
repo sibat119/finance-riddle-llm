@@ -5,7 +5,7 @@ import gc
 from typing import Dict, List, Tuple, Any, Optional
 from torch.distributed import destroy_process_group
 
-from src.chat_session import (
+from src.llm_inference import (
     selector
 )
 from src import cfg_reader
@@ -45,10 +45,11 @@ def main():
     }
     
     llms = [
-        # 'Qwen/Qwen2.5-7B-Instruct',
+        'BanglaLLM/bangla-llama-7b-instruct-v0.1',
+        'Qwen/Qwen2.5-7B-Instruct',
         # 'meta-llama/Llama-3.2-1B-Instruct',
-        # 'meta-llama/Llama-3.1-8B-Instruct',
-        "Qwen/QwQ-32B",
+        'meta-llama/Llama-3.1-8B-Instruct',
+        # "Qwen/QwQ-32B",
         "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
         "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
         # 'Qwen/Qwen2.5-14B-Instruct',
@@ -73,7 +74,7 @@ def main():
             input_text = example["Questions"]
             input_id = idx
             # type_of_question = example['type']
-            breakpoint()
+            # breakpoint()
             # input_text = prompts.get(prompt_category_map.get(type_of_question, ""), "")
             # if input_text:
             #     input_text = input_text.format(question)
