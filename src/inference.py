@@ -38,10 +38,12 @@ def main():
     args = parser.parse_args()
     
     # Set paths based on project
+    prompt_structure = ""
     if args.project == "fin":
-        input_ds_path = f'{files.get_project_root()}/data/input/question_w_type.csv'
+        input_ds_path = f'{files.get_project_root()}/data/input/fin/question_set_fin.csv'
         out_dir = f'{files.get_project_root()}/data/output/financial/'
         system_information = "You are a financial analyst who explains topics such as global markets, stocks, and financial models in a simple and easy-to-understand manner. Provide clear, concise answers with relatable examples, avoiding technical jargon, to help a layperson easily grasp the concepts."
+        prompt_structure= "You are a financial expert. Gather relevant and reliable information for the question and provide a detailed answer. Give proper explanation/reasoning for the answer. Don't include any unreliable information. Don't include any unreliable information. Do not include any unexplained jargon or technical terms, if you need to include them, please explain them in a way that is easy to understand. Do not say 'according to the sources' or 'mentioned in the <source>' or similar. Your response should be correct/true. Please verify your answer before responding.Question: {}"
     else:  # puzzle
         input_ds_path = f'{files.get_project_root()}/data/input/riddles-v1.csv'
         out_dir = f'{files.get_project_root()}/data/output/riddles/'
@@ -92,7 +94,12 @@ def main():
             batch_end = min(batch_start + batch_size, len(ds))
             batch_examples = ds[batch_start:batch_end]
             
-            batch_inputs = batch_examples["Questions"]
+            if args.project == "fin":
+                questions = batch_examples['Question']
+                batch_inputs = [prompt_structure.format(q) for q in questions]
+            else:
+                batch_inputs = batch_examples["Questions"]
+                
             batch_ids = list(range(batch_start, batch_start + len(batch_examples)))
             system_information_batched = [system_information] * len(batch_inputs)
             batch_responses = []

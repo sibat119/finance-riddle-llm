@@ -1,0 +1,50 @@
+S.N.,Question,Question Type
+1," What is the pre-market price of Amazon (AMZN) today?",Most recent data retrieval
+2," What was the last closing price of Amazon (AMZN)?",Most recent data retrieval
+3,What is the P/E ratio of Amazon (AMZN)?,Most recent data retrieval
+4,What is the dividend yield of Amazon (AMZN)?,Most recent data retrieval
+5,What is the earnings per share (EPS) of Amazon (AMZN)?,Most recent data retrieval
+6,What is the 52-week high and low of Amazon (AMZN)?,Most recent data retrieval
+7,What is the current market capitalization of Amazon (AMZN)?,Most recent data retrieval
+8,What were the quarterly revenue and profit margins for Amazon (AMZN) in the last quarter?“,Most recent data retrieval
+9,What is the 52-week high and low of Amazon (AMZN)?,Most recent data retrieval
+10,What is the volatility of Amazon (AMZN) this week?,Most recent data retrieval
+11,What is the debt to equity ratio of Amazon (AMZN) currently?,Most recent data retrieval
+12,What was the volume of shares traded for Amazon (AMZN) yesterday/ last business day?,Most recent data retrieval
+13,What is Amaon's operating margin?,Most recent data retrieval
+14,What is the current return on investment  (ROI) for Amazon (AMZN)?,Most recent data retrieval
+15,How much cash does AMZN have on hand?,Historical data retrieval
+16,What is AMZN's current beta value?,Historical data retrieval
+17,Should I buy Amazon's stock today?,Historical data retrieval
+18,Is Amazon stock good for short term invertment?,Historical data retrieval
+19,What are some of the key cost drivers for Amazon (AMZN)?,Historical data retrieval
+20,How much has the NASDAQ-100 index gained in the past six months?,Historical data retrieval
+21,Which five stocks have the highest weight in the NASDAQ-100 index?,Data retrieval and reasoning
+22,What stock performed the best in NASDAQ-100 today?,Data retrieval and reasoning
+23,What are the most volatile stocks of each sectors in NASDAQ-100?,Data retrieval and reasoning
+24,"What was the closing price of Amazon (AMZN) stock on March 15, 2024?",Historical data retrieval
+25,Which NASDAQ stock had the largest single-day gain in 2024?,Data retrieval and reasoning
+26,What was the closing price of Amazon (AMZN) stock on February 18 and 19 in 2020?,Historical data retrieval
+27,What were the quarterly revenue and profit margins for Amazon (AMZN) in Q4 2019?“,Historical data retrieval
+28,When was the maximum volume of shares traded in Amazon (AMZN) history?,Historical data retrieval
+29,What was the biggest one-day drop in NASDAQ history?,Historical data retrieval
+30,Which NASDAQ stocks have had the highest intraday volatility in the past year?,Data retrieval and reasoning
+31,What is the historical dividend payout ratio for Amazon (AMZN)?,Historical data retrieval
+32,In which year did Amazan (AMZN) have the highest revenue?,Historical data retrieval
+33,How has public sentiment towards Amazon changed over the past year?,Data retrieval and reasoning
+34,What are the key drivers of AMZN stock price volatility?,Data retrieval and reasoning
+35,How does AMZN's return on equity compare to its competitors?,Data retrieval and reasoning
+36,How does AMZN's profit margin compare to industry averages?,Data retrieval and reasoning
+37,What are the potential risks associated with investing in AMZN's stock?,Reasoning
+38,How does AMZN's stock price react to changes in trade policies and tariffs?,Reasoning
+39,Can you provide an overview of AMZN's financial performance in the last quarter?,Data retrieval and reasoning
+40,How does AMZN's price-to-earnings ratio compare to its industry peers?,Data retrieval and reasoning
+41,How does AMZN's stock price react to changes in macroeconomic indicators?,Data retrieval and reasoning
+42,What are the key risks facing AMZN as a company?,Reasoning
+43,What are AMZN's current top competitors in the tech industry?,Reasoning
+44,What are some recent challenges or controversies faced by Amazon (AMZN)?,Reasoning
+45,Can you provide an overview of AMZN's financial performance in the last year?,Summarization
+46,When is the next earnings report of Amazon?,Online Research
+47,Which sector performed the best in NASDAQ 100 in the last year?,Data retrieval and reasoning
+48,Which sector performed the best in NASDAQ 100 during COVID?,Data retrieval and reasoning
+49,Can you provide a price forecast for Amazon stock for next week?,Forecast/Predicting
