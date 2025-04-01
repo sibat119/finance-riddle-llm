@@ -2,6 +2,7 @@ from datasets import Dataset
 from tqdm import tqdm
 import torch
 import gc
+import argparse
 from typing import Dict, List, Tuple, Any, Optional
 from torch.distributed import destroy_process_group
 
@@ -28,9 +29,24 @@ def cleanup_resources(session: Any, verbose: bool = True):
             print(str(e))
             
 def main():
-    # input_ds_path = f'{files.get_project_root()}/data/input/question_w_type.csv'
-    input_ds_path = f'{files.get_project_root()}/data/input/riddles-v1.csv'
-    out_dir = f'{files.get_project_root()}/data/output/riddles/'
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description="Run inference with specified parameters")
+    parser.add_argument("--project", type=str, choices=["fin", "puzzle"], default="puzzle", 
+                        help="Project to run inference on (fin/puzzle)")
+    parser.add_argument("--model_name", type=str, default="", 
+                        help="Model name to use for inference")
+    args = parser.parse_args()
+    
+    # Set paths based on project
+    if args.project == "fin":
+        input_ds_path = f'{files.get_project_root()}/data/input/question_w_type.csv'
+        out_dir = f'{files.get_project_root()}/data/output/financial/'
+        system_information = "You are a financial analyst who explains topics such as global markets, stocks, and financial models in a simple and easy-to-understand manner. Provide clear, concise answers with relatable examples, avoiding technical jargon, to help a layperson easily grasp the concepts."
+    else:  # puzzle
+        input_ds_path = f'{files.get_project_root()}/data/input/riddles-v1.csv'
+        out_dir = f'{files.get_project_root()}/data/output/riddles/'
+        system_information = "Solve these bengali riddles also provide your reasoning for it."
+    
     ds = Dataset.from_csv(input_ds_path)
     cfg = cfg_reader.primary.load("conf/config.yaml")
     prompts = cfg_reader.primary.load("data/prompt/fin.yml")
@@ -44,26 +60,27 @@ def main():
         "Volatility Risk Questions": "volatility_risk",
     }
     
-    llms = [
-        'BanglaLLM/bangla-llama-7b-instruct-v0.1',
-        'Qwen/Qwen2.5-7B-Instruct',
-        # 'meta-llama/Llama-3.2-1B-Instruct',
-        'meta-llama/Llama-3.1-8B-Instruct',
-        # "Qwen/QwQ-32B",
-        "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-        # 'Qwen/Qwen2.5-14B-Instruct',
-        # 'allenai/OLMo-7B-Instruct',
-        # 'mistralai/Mistral-7B-Instruct-v0.3',
+    # Use the specified model if provided, otherwise use the default list
+    if args.model_name:
+        llms = [args.model_name]
+    else:
+        llms = [
+            'BanglaLLM/bangla-llama-7b-instruct-v0.1',
+            'Qwen/Qwen2.5-7B-Instruct',
+            # 'meta-llama/Llama-3.2-1B-Instruct',
+            'meta-llama/Llama-3.1-8B-Instruct',
+            # "Qwen/QwQ-32B",
+            "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+            # 'Qwen/Qwen2.5-14B-Instruct',
+            # 'allenai/OLMo-7B-Instruct',
+            # 'mistralai/Mistral-7B-Instruct-v0.3',
         ]
+        
     instruct_models = selector.get_instruct_models()
 
     results = []
-    # system_information = "You are a seasoned financial analyst with expertise in global markets, equity analysis, and financial modeling. Provide detailed and data-driven responses including technical metrics tailored to financial experts."
-                
-    # system_information = "You are a financial analyst who explains topics such as global markets, stocks, and financial models in a simple and easy-to-understand manner. Provide clear, concise answers with relatable examples, avoiding technical jargon, to help a layperson easily grasp the concepts."
-    system_information = "Solve these bengali riddles also provide your reasoning for it."
-
+    
     # Loop through LLMs and generate responses
     for llm in tqdm(llms, desc='Evaluating LLMs'):
         display.in_progress(f'Generating response from {llm}')
@@ -114,12 +131,47 @@ def main():
         # clear resources
         cleanup_resources(session=session)
 
-    # Convert to a pandas DataFrame for easier CSV export
-    output_dataset = Dataset.from_list(results)
-    df = output_dataset.to_pandas()
-
-    # Save to CSV
+    # Check if output file already exists and load it
     output_file = "llm_responses.csv"
-    df.to_csv(f"{out_dir}/{output_file}", index=False)
+    output_path = f"{out_dir}/{output_file}"
+    
+    try:
+        # Try to load existing results
+        existing_df = None
+        try:
+            import os
+            if os.path.exists(output_path):
+                existing_df = Dataset.from_csv(output_path).to_pandas()
+                print(f"Loaded existing results from {output_path}")
+        except Exception as e:
+            print(f"Error loading existing file: {str(e)}")
+            existing_df = None
+            
+        # Convert current results to DataFrame
+        new_df = Dataset.from_list(results).to_pandas()
+        
+        if existing_df is not None:
+            # Merge with existing results
+            for llm in llms:
+                if llm in new_df.columns:
+                    # Add only the new model results to the existing DataFrame
+                    existing_df[llm] = new_df[llm]
+            df = existing_df
+        else:
+            # Use new results if no existing file
+            df = new_df
+        
+        # Save to CSV
+        df.to_csv(output_path, index=False)
+        print(f"Results saved to {output_file} with {len(llms)} model(s): {', '.join(llms)}")
+        
+    except Exception as e:
+        print(f"Error processing results: {str(e)}")
+        # Fallback to saving just the new results
+        output_dataset = Dataset.from_list(results)
+        df = output_dataset.to_pandas()
+        df.to_csv(output_path, index=False)
+        print(f"Results saved to {output_file}")
 
-    print(f"Results saved to {output_file}")
+# if __name__ == "__main__":
+#     main()
