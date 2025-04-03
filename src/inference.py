@@ -128,7 +128,13 @@ def main():
         cleanup_resources(session=session)
 
     # Check if output file already exists and load it
-    output_file = "without_rag_responses.csv"
+    if args.model_name:
+        mname = args.model_name
+        mname = mname.replace("/", "_")
+        output_file = f"without_rag_responses{mname}.csv"
+    else:
+        output_file = f"without_rag_responses.csv"
+        
     os.makedirs(out_dir, exist_ok=True)
     output_path = f"{out_dir}/{output_file}"
     
